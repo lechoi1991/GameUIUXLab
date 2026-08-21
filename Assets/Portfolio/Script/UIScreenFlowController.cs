@@ -35,6 +35,7 @@ public class UIScreenFlowController : MonoBehaviour
         if (hudView != null)
         {
             hudView.OnHealthDepleted += OnHealthDepleted;
+            hudView.OnTimeDepleted += OnTimeDepleted;
         }
     }
 
@@ -49,6 +50,7 @@ public class UIScreenFlowController : MonoBehaviour
         if (hudView != null)
         {
             hudView.OnHealthDepleted -= OnHealthDepleted;
+            hudView.OnTimeDepleted -= OnTimeDepleted;
         }
     }
 
@@ -115,6 +117,11 @@ public class UIScreenFlowController : MonoBehaviour
     {
         ChangeScreen(ScreenState.Result);
         Time.timeScale = 1f;
+    }
+
+    private void OnTimeDepleted()
+    {
+        ShowResult();
     }
     
     private void ChangeScreen(ScreenState nextState)

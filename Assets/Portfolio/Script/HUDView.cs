@@ -14,14 +14,39 @@ public class HUDView : MonoBehaviour
     private float _health = 100f;
 
     public event Action OnHealthDepleted;
+    public event Action OnTimeDepleted;
+
+    private bool _isTimerRunning;
 
     private void Start()
     {
         _score = 0;
         _remainTime = 60f;
         _health = 100f;
+        _isTimerRunning = false;
 
         healthSlider.maxValue = 100f;
+
+        Refresh();
+    }
+
+    private void Update()
+    {
+        if (!_isTimerRunning)
+            return;
+
+        _remainTime -= Time.deltaTime;
+
+        if (_remainTime <= 0f)
+        {
+            _remainTime = 0f;
+            _isTimerRunning = false;
+
+            Refresh();
+            
+            OnTimeDepleted?.Invoke();
+            return;
+        }
 
         Refresh();
     }
@@ -35,6 +60,8 @@ public class HUDView : MonoBehaviour
 
     public void AddScoreAndDamage()
     {
+         _isTimerRunning = true;
+
         _score += 10;
 
         _health = Mathf.Max(0f, _health - 10f);
@@ -52,6 +79,8 @@ public class HUDView : MonoBehaviour
         _score = 0;
         _remainTime = 60f;
         _health = 100f;
+
+        _isTimerRunning = false;
 
         healthSlider.maxValue = 100f;
 
